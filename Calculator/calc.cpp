@@ -1,5 +1,6 @@
 #include "../Libraries/calc.h"
 #include "../Libraries/files.h"
+#include "../Libraries/tree.h"
 #include <math.h>
 #include <errno.h>
 #include <string.h>
@@ -34,6 +35,8 @@ Calc::Calc (char* filename)
 
 Calc::~Calc ()
 {
+	error   = 0;
+	counter = 0;
 	free(symbols);
 };
 
