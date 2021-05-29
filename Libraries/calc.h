@@ -8,7 +8,7 @@ enum functions
 	COSH,	TANH,	CTANH,
 	ASINH,	ACOSH,	ATANH,
 	ACTANH, EXP,	LN,
-	LG,		LOG,	SQRT
+	LG,	LOG,	SQRT
 };
 
 
