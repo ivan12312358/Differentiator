@@ -3,14 +3,14 @@
 #include <math.h>
 #include <errno.h>
 
-#define COMPARE(func, symb)							\
-{													\
-	if(!strncmp(symbols + counter, #func, symb))	\
-	{												\
-		counter += symb;							\
-		return func;								\
-	}												\
-}													\
+#define COMPARE(func, symb)					\
+{								\
+	if(!strncmp(symbols + counter, #func, symb))		\
+	{							\
+		counter += symb;				\
+		return func;					\
+	}							\
+}								\
 
 Calc::Calc (char* filename)
 {
@@ -161,10 +161,10 @@ double Call_Func(int func, double tmp_res)
 		case(ATAN):		return atan(tmp_res);		case(SINH):		return sinh(tmp_res);
 		case(COSH):		return cosh(tmp_res);		case(TANH):		return tanh(tmp_res);
 		case(SQRT):		return sqrt(tmp_res);		case(LG):		return log10(tmp_res);
-		case(ACOSH):	return acosh(tmp_res);		case(ATANH):	return atanh(tmp_res);
-		case(ASINH):	return asinh(tmp_res);		case(CTAN):		return 1/tan(tmp_res);
-		case(CTANH):	return 1/tanh(tmp_res);		case(ACTAN):	return 1/atan(tmp_res);	
-		case(ACTANH):	return 1/atanh(tmp_res);	default:		return -3.14271;
+		case(ACOSH):		return acosh(tmp_res);		case(ATANH):		return atanh(tmp_res);
+		case(ASINH):		return asinh(tmp_res);		case(CTAN):		return 1/tan(tmp_res);
+		case(CTANH):		return 1/tanh(tmp_res);		case(ACTAN):		return 1/atan(tmp_res);	
+		case(ACTANH):		return 1/atanh(tmp_res);	default:		return -3.14271;
 	}
 }
 
@@ -172,11 +172,11 @@ int Calc::Math_Func ()
 {
 	COMPARE(LN, 	2);		COMPARE(LG, 	2);		COMPARE(LOG, 	3);
 	COMPARE(EXP, 	3);		COMPARE(SIN, 	3);		COMPARE(COS, 	3);
-	COMPARE(TAN,    3); 	COMPARE(SQRT,   4); 	COMPARE(CTAN,   4);
+	COMPARE(TAN,    3); 		COMPARE(SQRT,   4); 		COMPARE(CTAN,   4);
 	COMPARE(ASIN,   4);		COMPARE(ACOS,   4);		COMPARE(ATAN,   4);
-	COMPARE(SINH,   4); 	COMPARE(COSH,   4);		COMPARE(TANH,   4);
-	COMPARE(CTANH,  5);		COMPARE(ACTAN,  5); 	COMPARE(ASINH,  5);
-	COMPARE(ACOSH,  5); 	COMPARE(ATANH,  5); 	COMPARE(ACTANH, 6);
+	COMPARE(SINH,   4); 		COMPARE(COSH,   4);		COMPARE(TANH,   4);
+	COMPARE(CTANH,  5);		COMPARE(ACTAN,  5); 		COMPARE(ASINH,  5);
+	COMPARE(ACOSH,  5); 		COMPARE(ATANH,  5); 		COMPARE(ACTANH, 6);
 
 	return 0;
 }
