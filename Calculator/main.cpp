@@ -5,7 +5,7 @@ int main (int argc, char* argv[])
 {
 	Calc calc(argv[1]);
 
-	double result = calc.G ();
+	double result = calc.GetG ();
 
 	if(calc.error)
 		printf ("%s\nWrong expression. Don't use spaces!\n", calc.symbols);

@@ -5,17 +5,23 @@ char buf[SIZE] = "";
 
 //-------------------------------------------------------------------------------
 
-void split (char** str, char* symbols)
+int split (char** str, char* symbols)
 {
-	symbols = strtok (symbols, " \n");
+	char* tmp_sym = symbols;
 
-	int cnt = 0;
+	symbols = strtok (symbols, "=\n");
+
+	int size = 0;
 
 	while(symbols != NULL)
 	{
-		str[cnt++] = symbols;
-		symbols    = strtok (nullptr, " \n");
+		str[size++] = symbols;
+		symbols     = strtok (nullptr, "=\n");
 	}
+
+	symbols = tmp_sym;
+
+	return size;
 }
 
 //-------------------------------------------------------------------------------
@@ -36,13 +42,13 @@ void scan (FILE* fin_)
 
 //-------------------------------------------------------------------------------
 
-int read (char** symbols, const char* filename, FILE* f_out)
+int read (char** symbols, const char* filename)
 {
 	FILE* base = fopen (filename, "r");
 
 	if(base == nullptr)
 	{
-		print (f_out,"Couldn't find file");
+		printf ("Couldn't find file\n");
 		return 0;
 	}
 

@@ -1,5 +1,3 @@
-double Call_Func(int func, double tmp_res);
-
 enum functions 
 {
 	SIN = 1, COS,	TAN,
@@ -22,12 +20,15 @@ class Calc
 		Calc(char* filename);
 		~Calc();
 
-		double G();
-		double E();
-		double T();
-		double Q();
-		double F();
-		double P();
-		double N();
+		double GetG();
+		double GetE();
+		double GetT();
+		double GetQ();
+		double GetF();
+		double GetP();
+		double GetN();
 		int Math_Func();
 };
+
+double Call_Func(int func, double tmp_res);
+void Create_Expession(char** str, int str_cnt);

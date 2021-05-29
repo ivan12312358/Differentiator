@@ -2,6 +2,7 @@
 #include "../Libraries/files.h"
 #include <math.h>
 #include <errno.h>
+#include <string.h>
 
 #define COMPARE(func, symb)							\
 {													\
@@ -12,9 +13,23 @@
 	}												\
 }													\
 
+
 Calc::Calc (char* filename)
 {
-	read (&symbols, filename, stdout);
+	char* sym = nullptr;
+	int   sym_cnt = read (&sym, filename);
+
+	char** str = (char**)calloc(sym_cnt, sizeof(char*));
+	int str_cnt = split(str, sym);
+
+	symbols = (char*)calloc(sym_cnt, sizeof(char*));
+
+	Create_Expession(str, str_cnt - 1);
+
+	sprintf(symbols, "%s", str[str_cnt - 1]);
+
+	free(sym);
+	free(str);
 }
 
 Calc::~Calc ()
@@ -22,9 +37,9 @@ Calc::~Calc ()
 	free(symbols);
 };
 
-double Calc::G ()
+double Calc::GetG ()
 {
-	double result = E ();
+	double result = GetE ();
 
 	if(symbols[counter] != '\0')
 		error = 1;
@@ -32,15 +47,15 @@ double Calc::G ()
 	return result;	
 }
 
-double Calc::E ()
+double Calc::GetE ()
 {
-	double result = T ();
+	double result = GetT ();
 
 	while(symbols[counter] == '+' || symbols[counter] == '-')
 	{
 		char operator_ = symbols[counter++];
 
-		double tmp_res = T ();
+		double tmp_res = GetT ();
 
 		if(operator_ == '+')
 			result += tmp_res;
@@ -51,15 +66,15 @@ double Calc::E ()
 	return result;
 }
 
-double Calc::T ()
+double Calc::GetT ()
 {
-	double result = Q ();
+	double result = GetQ ();
 
 	while(symbols[counter] == '*' || symbols[counter] == '/')
 	{
 		char operator_ = symbols[counter++];
 
-		double tmp_res = Q ();
+		double tmp_res = GetQ ();
 
 		if(operator_ == '*')
 			result *= tmp_res;
@@ -70,15 +85,14 @@ double Calc::T ()
 	return result;
 }
 
-double Calc::Q ()
+double Calc::GetQ ()
 {
-	double result = F ();
+	double result = GetF ();
 
 	while(symbols[counter] == '^')
 	{
 		counter++;
-
-		result = pow(result, F ());
+		result = pow(result, GetQ ());
 
 		if(errno == EDOM || errno == ERANGE)
 			perror("Error");
@@ -87,15 +101,15 @@ double Calc::Q ()
 	return result;
 }
 
-double Calc::F ()
+double Calc::GetF ()
 {
-	double result = P ();
+	double result = GetP ();
 
 	int function = 0;
 
 	while((function = Math_Func ()))
 	{
-		result = Call_Func (function, P ());
+		result = Call_Func (function, GetP ());
 
 		if(errno == EDOM || errno == ERANGE)
 			perror("Error");
@@ -104,14 +118,14 @@ double Calc::F ()
 	return result;
 }
 
-double Calc::P ()
+double Calc::GetP ()
 {
 	double result = 0;
 
 	if(symbols[counter] == '(')
 	{
 		counter++;
-		result = E ();
+		result = GetE ();
 
 		if(symbols[counter++] != ')')
 			error = 1;
@@ -123,21 +137,21 @@ double Calc::P ()
 		if(symbols[counter] == '(')
 		{
 			counter++;
-			result = -E ();
+			result = -GetE ();
 
 			if(symbols[counter++] != ')')
 				error = 1;
 		}
 		else
-			result = -F ();
+			result = -GetF ();
 	}
 	else
-		result = N ();
+		result = GetN ();
 
 	return result;
 }
 
-double Calc::N ()
+double Calc::GetN ()
 {
 	char digit[128];
 	int  size = 0;
@@ -150,7 +164,20 @@ double Calc::N ()
 	return atof(digit);	
 }
 
-double Call_Func(int func, double tmp_res)
+int Calc::Math_Func ()
+{
+	COMPARE(LN, 	2);		COMPARE(LG, 	2);		COMPARE(LOG, 	3);
+	COMPARE(EXP, 	3);		COMPARE(SIN, 	3);		COMPARE(COS, 	3);
+	COMPARE(TAN,    3); 	COMPARE(SQRT,   4); 	COMPARE(CTAN,   4);
+	COMPARE(ASIN,   4);		COMPARE(ACOS,   4);		COMPARE(ATAN,   4);
+	COMPARE(SINH,   4); 	COMPARE(COSH,   4);		COMPARE(TANH,   4);
+	COMPARE(CTANH,  5);		COMPARE(ACTAN,  5); 	COMPARE(ASINH,  5);
+	COMPARE(ACOSH,  5); 	COMPARE(ATANH,  5); 	COMPARE(ACTANH, 6);
+
+	return 0;
+}
+
+double Call_Func (int func, double tmp_res)
 {
 	switch(func)
 	{
@@ -168,15 +195,36 @@ double Call_Func(int func, double tmp_res)
 	}
 }
 
-int Calc::Math_Func ()
+void Create_Expession(char** str, int str_cnt)
 {
-	COMPARE(LN, 	2);		COMPARE(LG, 	2);		COMPARE(LOG, 	3);
-	COMPARE(EXP, 	3);		COMPARE(SIN, 	3);		COMPARE(COS, 	3);
-	COMPARE(TAN,    3); 	COMPARE(SQRT,   4); 	COMPARE(CTAN,   4);
-	COMPARE(ASIN,   4);		COMPARE(ACOS,   4);		COMPARE(ATAN,   4);
-	COMPARE(SINH,   4); 	COMPARE(COSH,   4);		COMPARE(TANH,   4);
-	COMPARE(CTANH,  5);		COMPARE(ACTAN,  5); 	COMPARE(ASINH,  5);
-	COMPARE(ACOSH,  5); 	COMPARE(ATANH,  5); 	COMPARE(ACTANH, 6);
+	char** variables = (char**)calloc(str_cnt, sizeof(char*));
+	char** values = (char**)calloc(str_cnt, sizeof(char*));
 
-	return 0;
+	int var_cnt = 0;
+
+	for(int i = 0; i < str_cnt; i++)
+	{
+		if(i % 2 == 0)
+			variables[var_cnt] = str[i];
+		else
+			values[var_cnt++]  = str[i];
+	}
+
+	char  substring[512] = "";
+	char* tmp = nullptr;
+
+	for(int i = 0; i < var_cnt; )
+	{
+		tmp = strstr(str[str_cnt], variables[i]);
+
+		if(tmp != nullptr)
+		{
+			sprintf(substring, "%s", tmp + strlen(variables[i]));
+			memset(tmp, 0, strlen(tmp));
+			sprintf(tmp, "%s", values[i]);
+			strcat(tmp, substring);
+			memset(substring, 0, strlen(substring));
+		}
+		else i++;
+	}
 }

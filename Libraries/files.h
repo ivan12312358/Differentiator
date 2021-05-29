@@ -10,7 +10,7 @@
  \param [in] symbols - input text(base)
  \param [in] str - text(base) separated into lines
 */
-void split (char** str, char* symbols);
+int split (char** str, char* symbols);
 
 /*!
  \brief Print message in console
@@ -31,4 +31,4 @@ void scan  (FILE* fin_);
  \param [in] filename - name of file 
  \param [in] f_out - output stream
 */
-int  read  (char** symbols, const char* filename, FILE* f_out);
+int  read  (char** symbols, const char* filename);
