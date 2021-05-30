@@ -10,6 +10,8 @@ enum functions
 };
 
 
+class Node;
+
 class Calc
 {
 	public:
@@ -18,16 +20,17 @@ class Calc
 		int   error   = 0;
 
 		Calc(char* filename);
-		~Calc();
+	   ~Calc();
 
-		double GetG();
-		double GetE();
-		double GetT();
-		double GetQ();
-		double GetF();
-		double GetP();
-		double GetN();
-		int Math_Func();
+		Node* GetG();
+		Node* GetE();
+		Node* GetT();
+		Node* GetQ();
+		Node* GetF();
+		Node* GetP();
+		Node* GetN();
+		int Is_Num_Alpha();
+		const char* Math_Func();
 };
 
 double Call_Func(int func, double tmp_res);

@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++17 -g
-SRC = ./Calculator/calc.cpp ./Calculator/main.cpp ./Files/files.cpp
+SRC = ./Calculator/calc.cpp ./Calculator/main.cpp ./Files/files.cpp ./Tree/node.cpp
 OBJ = $(SRC:.cpp=.o)
 TARGET = calc.out
 
