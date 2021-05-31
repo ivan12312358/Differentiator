@@ -1,6 +1,6 @@
 #include "../Libraries/files.h"
 #include "../Libraries/node.h"
-#include "../Libraries/stack.h"
+
 
 Node::Node (const char* Data): 
 	data (strdup(Data))

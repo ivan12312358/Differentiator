@@ -15,8 +15,6 @@ int main(int argc, char* argv[])
 
 	Node* head = calc.GetG ();
 
-	head->Graph();
-
 	Node* diff = head->Differentiator();
 
 	diff->Graph();

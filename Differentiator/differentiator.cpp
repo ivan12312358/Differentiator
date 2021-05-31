@@ -64,7 +64,6 @@ Node* Node::Differentiator ()
 		}
 		else if(var_r) 														//правое поддерево константное
 		{
-			printf("loh");
 			Node* node  = new Node ("1");											
 			return *(*(cL ^ *(cR - *node)) * cR) * dL;						// (f(x)^const)'  = f(x)^(const - 1)*const*f'(x) 
 		}
