@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	if(argc < 2)	
 	{
-		printf("Type file with expression is startup parametrs.\n");
+		printf("Type name of file in startup parametrs with expression.\n");
 		return 0;
 	}
 
