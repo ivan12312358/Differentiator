@@ -6,10 +6,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#define COMPARE(func, symb)							\
-{													\
-	if(!strncmp(symbols + counter, #func, symb))	\
-		return #func;								\
+#define COMPARE(func, symb)					\
+{											\
+	if(!strncmp(symbols, #func, symb))		\
+		return #func;						\
 }
 
 Calc::Calc (char* filename)
@@ -112,7 +112,7 @@ Node* Calc::GetF ()
 
 	const char* function = nullptr;
 
-	while((function = Math_Func ()))
+	while((function = Math_Func (symbols + counter)))
 	{
 		counter += strlen(function);
  		Node* operator_ = new Node ((char*)function, strlen(function));
@@ -142,7 +142,7 @@ Node* Calc::GetP ()
 	{
 		Node* operator_ = new Node (symbols + counter, 1);
 		
-		result = new Node ((char*)"0", 1);
+		result = new Node ("0");
 
 		counter++;
 
@@ -181,7 +181,7 @@ Node* Calc::GetN ()
 
 int Calc::Is_Num_Alpha()
 {
-	if(counter > 128 || Math_Func()) return 0;
+	if(counter > 128 || Math_Func(symbols + counter)) return 0;
 
 	if(isdigit(symbols[counter]))
 		return 1;
@@ -195,7 +195,7 @@ int Calc::Is_Num_Alpha()
 	return 0;
 }
 
-const char* Calc::Math_Func ()
+const char* Math_Func (char* symbols)
 {
 	COMPARE(LN, 	2);		COMPARE(LG, 	2);		COMPARE(LOG, 	3);
 	COMPARE(EXP, 	3);		COMPARE(SIN, 	3);		COMPARE(COS, 	3);

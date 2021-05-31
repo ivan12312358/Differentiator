@@ -6,7 +6,7 @@ enum functions
 	COSH,	TANH,	CTANH,
 	ASINH,	ACOSH,	ATANH,
 	ACTANH, EXP,	LN,
-	LG,	LOG,	SQRT
+	LG,		LOG,	SQRT
 };
 
 
@@ -30,8 +30,8 @@ class Calc
 		Node* GetP();
 		Node* GetN();
 		int Is_Num_Alpha();
-		const char* Math_Func();
 };
 
+const char* Math_Func (char* symbols);
 double Call_Func(int func, double tmp_res);
 void Create_Expession(char** str, int str_cnt);

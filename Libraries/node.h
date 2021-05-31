@@ -11,13 +11,18 @@ class Node
 		Node* left  = nullptr;
 		Node* right = nullptr;
 
-		Node (char* Data, int size);
-		Node (char* Data);
+		Node (const char* Data, int size);
+		Node (const char* Data);
 	   ~Node ();
-		void Graph ();
-		void Differentiator ();
-		void graph_	  (FILE* f_graph);
-		void g_print_ (FILE* f_graph);
 		Node (const Node& node) = delete;
 		Node& operator= (Node& node);
+
+
+		void Graph    ();
+		void graph_	  (FILE* f_graph);
+		void g_print_ (FILE* f_graph);
+		void isconst  (int* variables);
+
+		Node* Copy ();
+		Node* Differentiator ();
 };

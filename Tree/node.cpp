@@ -2,7 +2,7 @@
 #include "../Libraries/node.h"
 #include "../Libraries/stack.h"
 
-Node::Node (char* Data): 
+Node::Node (const char* Data): 
 	data (strdup(Data))
 {
 	left  = nullptr;
@@ -11,7 +11,7 @@ Node::Node (char* Data):
 
 //-------------------------------------------------------------------------------
 
-Node::Node (char* Data, int size): 
+Node::Node (const char* Data, int size): 
 	data (strndup(Data, size))
 {
 	left  = nullptr;
@@ -109,9 +109,4 @@ void Node::Graph ()
 }
 
 //-------------------------------------------------------------------------------
-
-void Node::Differentiator ()
-{
-	
-}
 
