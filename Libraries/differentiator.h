@@ -2,9 +2,11 @@
 #define dR *right->Differentiator ()
 #define dF *F_node->Differentiator ()
 #define cF *F_node->Copy ()
-#define cH *Copy ()
 #define cR *right->Copy ()
 #define cL *left->Copy ()
+#define cH *Copy ()
+
+const size_t DIGIT = 10;
 
 class Node;
 
@@ -20,9 +22,9 @@ Node* operator ^ (Node& L, Node& R);
 
 /* Node* exp  (Node* node);      Node* ln (Node* node);       Node* lg (Node* node);
 
-Node* log  (Node* node);      Node* sqrt (Node* node);     Node* sin (Node* node);
+Node* log  (Node* node);      Node* sqrt (Node* node);     
 
-Node* cos  (Node* node);      Node* tan (Node* node);      Node* ctan (Node* node);
+Node* tan (Node* node);      Node* ctan (Node* node);
 
 Node* asin  (Node* node);     Node* acos (Node* node);     Node* atan (Node* node);
 
@@ -33,7 +35,7 @@ Node* tanh  (Node* node);     Node* ctanh (Node* node);    Node* asinh (Node* no
 Node* acosh  (Node* node);    Node* atanh (Node* node);    Node* actanh (Node* node);
  */
 
-Node* ln (Node* node);
+Node* ln (Node* F_node);	Node* sin (Node* node); 	Node* cos  (Node* node);
 
 /* const char* mass[] = {	"EXP",	    "LN",       "LG",
 						"LOG",	    "SQRT"      "SIN",
@@ -53,6 +55,9 @@ Node* (*funcs[]) (Node*) = {	exp, 	ln, 	lg,
 
  */
 
-const char* mass[] = {"LN"};
+void brackets(char* symbols, int size);
+void str_tolower(char* l_data, char* data, int size);
 
-Node* (*funcs[]) (Node*) = {ln};
+const char* mass[] = {"LN", "SIN", "COS"};
+
+Node* (*funcs[]) (Node*) = {ln, sin, cos};

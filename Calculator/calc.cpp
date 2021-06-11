@@ -6,10 +6,16 @@
 #include <string.h>
 #include <ctype.h>
 
+
 #define COMPARE(func, symb)					\
 {											\
 	if(!strncmp(symbols, #func, symb))		\
-		return #func;						\
+	{										\
+		if(is_string)						\
+			return (void*)#func;			\
+											\
+		return (void*)func;					\
+	}										\
 }
 
 Calc::Calc (char* filename)
@@ -17,10 +23,10 @@ Calc::Calc (char* filename)
 	char* sym = nullptr;
 	int   sym_cnt = read (&sym, filename);
 
-	char** str = (char**)calloc(sym_cnt, sizeof(char*));
-	int str_cnt = split(str, sym);
+	char** str  = (char**) calloc (sym_cnt, sizeof(char*));
+	int str_cnt = split (str, sym);
 
-	symbols = (char*)calloc(sym_cnt, sizeof(char*));
+	symbols = (char*) calloc (sym_cnt, sizeof(char*));
 
 	sprintf(symbols, "%s", str[str_cnt - 1]);
 
@@ -37,8 +43,6 @@ Calc::~Calc ()
 
 Node* Calc::GetG ()
 {
-//	printf("GetG: %s\n", symbols + counter);
-
 	Node* result = GetE ();
 
 	if(symbols[counter] != '\0')
@@ -49,8 +53,6 @@ Node* Calc::GetG ()
 
 Node* Calc::GetE ()
 {
-//	printf("GetE: %s\n", symbols + counter);
-
 	Node* result = GetT ();
 
 	while(symbols[counter] == '+' || symbols[counter] == '-')
@@ -68,8 +70,6 @@ Node* Calc::GetE ()
 
 Node* Calc::GetT ()
 {
-//	printf("GetT: %s\n", symbols + counter);
-
 	Node* result = GetQ ();
 
 	while(symbols[counter] == '*' || symbols[counter] == '/')
@@ -87,8 +87,6 @@ Node* Calc::GetT ()
 
 Node* Calc::GetQ ()
 {
-//	printf("GetQ: %s\n", symbols + counter);
-
 	Node* result = GetF ();
 
 	while(symbols[counter] == '^')
@@ -106,13 +104,11 @@ Node* Calc::GetQ ()
 
 Node* Calc::GetF ()
 {
-//	printf("GetF: %s\n", symbols + counter);
-
 	Node* result = GetP ();
 
 	const char* function = nullptr;
 
-	while((function = Math_Func (symbols + counter)))
+	while((function = (const char*) Math_Func (symbols + counter, 1)))
 	{
 		counter += strlen(function);
  		Node* operator_ = new Node ((char*)function, strlen(function));
@@ -126,16 +122,15 @@ Node* Calc::GetF ()
 
 Node* Calc::GetP ()
 {
-//	printf("GetP: %s\n", symbols + counter);
-
 	Node* result = nullptr;
 
-	if(symbols[counter] == '(')
+	if(symbols[counter] == '(' || symbols[counter] == '{')
 	{
 		counter++;
 		result = GetE ();
+		counter++;
 
-		if(symbols[counter++] != ')')
+		if(symbols[counter] != ')' || symbols[counter] != '}')
 			error = 1;
 	}
 	else if(symbols[counter] == '-')
@@ -146,11 +141,12 @@ Node* Calc::GetP ()
 
 		counter++;
 
-		if(symbols[counter] == '(')
+		if(symbols[counter] == '(' || symbols[counter] == '{')
 		{
 			operator_->left  = GetE ();
+			counter++;
 
-			if(symbols[counter++] != ')')
+			if(symbols[counter] != ')' || symbols[counter] == '}')
 				error = 1;
 		}
 		else operator_->left  = GetF ();
@@ -166,8 +162,6 @@ Node* Calc::GetP ()
 
 Node* Calc::GetN ()
 {
-//	printf("GetN: %s\n", symbols + counter);
-
 	char digit[128];
 	int  size = 0;
 
@@ -181,7 +175,7 @@ Node* Calc::GetN ()
 
 int Calc::Is_Num_Alpha()
 {
-	if(counter > 128 || Math_Func(symbols + counter)) return 0;
+	if(counter > 128 || Math_Func(symbols + counter, 0)) return 0;
 
 	if(isdigit(symbols[counter]))
 		return 1;
@@ -195,7 +189,7 @@ int Calc::Is_Num_Alpha()
 	return 0;
 }
 
-const char* Math_Func (char* symbols)
+void* Math_Func (char* symbols, int is_string)
 {
 	COMPARE(LN, 	2);		COMPARE(LG, 	2);		COMPARE(LOG, 	3);
 	COMPARE(EXP, 	3);		COMPARE(SIN, 	3);		COMPARE(COS, 	3);
@@ -205,10 +199,10 @@ const char* Math_Func (char* symbols)
 	COMPARE(CTANH,  5);		COMPARE(ACTAN,  5); 	COMPARE(ASINH,  5);
 	COMPARE(ACOSH,  5); 	COMPARE(ATANH,  5); 	COMPARE(ACTANH, 6);
 
-	return nullptr;
+	return NULL;
 }
 
-double Call_Func (int func, double tmp_res)
+double Call_Func (long func, double tmp_res)
 {
 	switch(func)
 	{

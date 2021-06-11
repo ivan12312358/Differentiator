@@ -32,6 +32,6 @@ class Calc
 		int Is_Num_Alpha();
 };
 
-const char* Math_Func (char* symbols);
-double Call_Func(int func, double tmp_res);
+void* Math_Func (char* symbols, int is_string);
+double Call_Func(long func, double tmp_res);
 void Create_Expession(char** str, int str_cnt);

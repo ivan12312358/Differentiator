@@ -6,6 +6,7 @@ TARGET = diff.out
 
 all: $(OBJ)
 	$(CXX) $^ -o $(TARGET)
+	rm -rf *.o *.dot
 
 .PHONY: clean
 clean:
